@@ -36,7 +36,7 @@ class Conway():
             col_cells = []
             for row in range(self._num_rows):
                 a_cell = Cell(self._win)
-                a_cell.alive = random.choices([True, False], weights=[0.20, 0.80])[0]
+                a_cell.alive = random.choices([True, False], weights=[0.08, 0.92])[0]
                 if a_cell.alive:
                     self._alive_cells.append((col,row))
                 col_cells.append(a_cell)
@@ -45,22 +45,16 @@ class Conway():
         for col in range(self._num_cols):
             for row in range(self._num_rows):
                 self._set_cell(col, row)
+                self._fill_cell(col, row)
                 self._draw_cell(col, row)
 
         
     def start_game(self):
         while True:
-            for col, row in self._alive_cells:
-                self._fill_cell(col, row)
-                self._draw_cell(col, row)
-            new_alive = self._check_alive_cell()
-            for col, row in new_alive:
+            for col, row in self._check_alive_cell():
                 self._fill_cell(col, row)
                 self._draw_cell(col, row)
             self._animate()
-                
-
-            time.sleep(0.05)
     
     def _draw_cell(self, i, j):
         self._cells[i][j].draw()
@@ -75,7 +69,7 @@ class Conway():
         if not self._win:
             return
         self._win.redraw()
-        #time.sleep(0.05)
+        time.sleep(0.10)
     
     def _set_cell(self, i, j):
         x1 = self._x1 + (self._cell_size_x * i),
@@ -86,7 +80,7 @@ class Conway():
 
     
     def _check_alive_cell(self):
-        lst = self._alive_cells
+        lst = []
         for col in range(self._num_cols):
             for row in range(self._num_rows):
                 neighbours = 0
